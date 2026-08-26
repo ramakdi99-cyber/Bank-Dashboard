@@ -1,187 +1,211 @@
 # Banking Project Portfolio Management Dashboard
 
-A full-stack enterprise portfolio management application designed for banking institutions to track, manage, and analyze their project portfolios with real-time dashboards, analytics, and role-based access control.
+A full-stack enterprise portfolio management application built for banking institutions to track, manage, and analyze project portfolios with real-time dashboards, analytics, and role-based access control.
+
+**Live Demo:** [https://bank-dashboard-zj3l.onrender.com](https://bank-dashboard-zj3l.onrender.com)
+**GitHub:** [https://github.com/ramakdi99-cyber/Bank-Dashboard](https://github.com/ramakdi99-cyber/Bank-Dashboard)
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Database Schema](#database-schema)
+- [Getting Started](#getting-started)
+- [Default Credentials](#default-credentials)
+- [API Reference](#api-reference)
+- [Features](#features)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
+
+---
 
 ## Overview
 
-The Banking Portfolio Management Dashboard provides a centralized platform for managing multiple project portfolios across banking divisions. It features real-time KPI tracking, budget monitoring, health status visualization, risk management, and comprehensive analytics — all wrapped in a modern, responsive UI with role-based access for administrators, managers, and viewers.
+The Banking Portfolio Management Dashboard provides a centralized platform for managing multiple project portfolios across banking divisions. It features:
+
+- **Real-time KPI tracking** with budget monitoring and health status visualization
+- **Portfolio & Project CRUD** with status, health, priority, and budget management
+- **Interactive analytics** with Recharts-powered charts (pie, bar, line)
+- **Role-based access control** (ADMIN / MANAGER / VIEWER)
+- **JWT authentication** with BCrypt password hashing
+- **Responsive UI** built with Tailwind CSS
+
+---
 
 ## Architecture
 
 ```
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│                  │     │                  │     │                  │
-│   React + Vite   │────▶│   Spring Boot    │────▶│   PostgreSQL 16  │
-│   (Port 3000)    │     │   (Port 8080)    │     │   (Port 5432)    │
-│                  │     │                  │     │                  │
-│  • React Router  │     │  • REST API      │     │  • JPA/Hibernate │
-│  • Recharts      │     │  • JWT Auth      │     │  • Flyway Migrate│
-│  • Tailwind CSS  │     │  • Spring Security│     │  • Connection Pool│
-│  • Axios         │     │  • Validation    │     │                  │
-│                  │     │                  │     │                  │
-└──────────────────┘     └──────────────────┘     └──────────────────┘
+┌──────────────────────┐        ┌──────────────────────┐        ┌──────────────────────┐
+│                      │        │                      │        │                      │
+│   React 18 + Vite    │───────▶│   Spring Boot 3.2    │───────▶│   PostgreSQL 16      │
+│   (Port 3000)        │  /api  │   (Port 8080)        │   JPA  │   (Port 5432)        │
+│                      │        │                      │        │                      │
+│  React Router 6      │        │  Spring Security 6   │        │  Flyway Migrations   │
+│  Recharts 2.12       │        │  JWT Authentication  │        │  HikariCP Pooling    │
+│  Tailwind CSS 3.4    │        │  Bean Validation     │        │                      │
+│  Axios 1.7           │        │  Lombok              │        │                      │
+│  Zustand 4.5         │        │                      │        │                      │
+│                      │        │                      │        │                      │
+└──────────────────────┘        └──────────────────────┘        └──────────────────────┘
 ```
 
-- **Frontend**: React 18 SPA with Vite bundler, Tailwind CSS for styling, Recharts for data visualization, and Axios for API communication.
-- **Backend**: Spring Boot 3.2 REST API with Spring Security + JWT for stateless authentication, Spring Data JPA for persistence, and Bean Validation for input validation.
-- **Database**: PostgreSQL 16 with Flyway for schema migrations, HikariCP connection pooling, and automatic data seeding.
+- **Frontend**: React 18 SPA with Vite bundler, Tailwind CSS, Recharts for data visualization, Zustand for state management, and Axios for API communication.
+- **Backend**: Spring Boot 3.2 REST API with Spring Security + JWT for stateless authentication, Spring Data JPA + Hibernate for persistence, and Bean Validation.
+- **Database**: PostgreSQL 16 with Flyway for schema migrations. H2 in-memory database for development and testing.
+- **DevOps**: Docker + Docker Compose for containerization, Nginx for SPA serving and reverse proxy in production.
 
-## Technology Stack
+---
 
-| Layer | Technology | Version | Purpose |
-|-------|-----------|---------|---------|
-| Frontend | React | 18.3 | UI framework |
-| Frontend | TypeScript | 5.5 | Type safety |
-| Frontend | Vite | 5.3 | Build tool & dev server |
-| Frontend | Tailwind CSS | 3.4 | Utility-first styling |
-| Frontend | Recharts | 2.12 | Charting library |
-| Frontend | React Router | 6.24 | Client-side routing |
-| Frontend | Axios | 1.7 | HTTP client |
-| Frontend | Zustand | 4.5 | State management |
-| Frontend | Vitest | 1.6 | Unit testing |
-| Frontend | React Testing Library | 16.0 | Component testing |
-| Backend | Java | 17 | Runtime |
-| Backend | Spring Boot | 3.2.5 | Application framework |
-| Backend | Spring Security | 6.2 | Authentication & authorization |
-| Backend | Spring Data JPA | 3.2 | Data access |
-| Backend | Hibernate | 6.4 | ORM |
-| Backend | JJWT | 0.12.3 | JWT token handling |
-| Backend | Lombok | - | Boilerplate reduction |
-| Backend | Maven | 3.9 | Build tool |
-| Database | PostgreSQL | 16 | Primary database |
-| Database | Flyway | - | Schema migrations |
-| Testing | JUnit 5 | - | Unit & integration testing |
-| Testing | Mockito | - | Mocking framework |
-| Testing | H2 Database | - | Test database |
-| DevOps | Docker | - | Containerization |
-| DevOps | Docker Compose | - | Multi-service orchestration |
-| DevOps | Nginx | - | Static file serving & reverse proxy |
+## Tech Stack
+
+### Frontend
+
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| React | 18.3 | UI framework |
+| TypeScript | 5.5 | Type safety |
+| Vite | 5.3 | Build tool & dev server |
+| Tailwind CSS | 3.4 | Utility-first styling |
+| Recharts | 2.12 | Charting library |
+| React Router | 6.24 | Client-side routing |
+| Axios | 1.7 | HTTP client |
+| Zustand | 4.5 | State management |
+| Lucide React | 0.394 | Icon library |
+| date-fns | 3.6 | Date formatting |
+| Vitest | 1.6 | Unit testing |
+| React Testing Library | 16.0 | Component testing |
+
+### Backend
+
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| Java | 17 | Runtime |
+| Spring Boot | 3.2.5 | Application framework |
+| Spring Security | 6.2 | Authentication & authorization |
+| Spring Data JPA | 3.2 | Data access |
+| Hibernate | 6.4 | ORM |
+| JJWT | 0.12.5 | JWT token handling |
+| Lombok | - | Boilerplate reduction |
+| Flyway | 10.10 | Schema migrations |
+| Maven | 3.9 | Build tool |
+| H2 Database | - | Dev/test database |
+| PostgreSQL | 16 | Production database |
+
+### DevOps
+
+| Technology | Purpose |
+|-----------|---------|
+| Docker | Containerization |
+| Docker Compose | Multi-service orchestration |
+| Nginx | Static file serving & reverse proxy |
+| Render | Cloud deployment |
+
+---
 
 ## Project Structure
 
 ```
 bank-project/
-├── docker-compose.yml                    # Multi-service orchestration
+├── docker-compose.yml                      # Multi-service orchestration
 ├── README.md
+├── .gitignore
 │
-├── backend/
-│   ├── Dockerfile                        # Multi-stage Maven build
-│   ├── pom.xml                           # Maven dependencies
-│   └── src/
-│       ├── main/
-│       │   ├── java/com/bankportfolio/
-│       │   │   ├── BankPortfolioApplication.java
-│       │   │   ├── config/
-│       │   │   │   ├── CorsConfig.java
-│       │   │   │   └── DataInitializer.java
-│       │   │   ├── controller/
-│       │   │   │   ├── AuthController.java
-│       │   │   │   ├── AnalyticsController.java
-│       │   │   │   ├── DashboardController.java
-│       │   │   │   ├── PortfolioController.java
-│       │   │   │   ├── ProjectController.java
-│       │   │   │   └── UserController.java
-│       │   │   ├── dto/
-│       │   │   │   ├── ApiResponse.java
-│       │   │   │   ├── AuthResponse.java
-│       │   │   │   ├── DashboardAnalytics.java
-│       │   │   │   ├── DashboardSummary.java
-│       │   │   │   ├── ErrorResponse.java
-│       │   │   │   ├── FinancialAnalytics.java
-│       │   │   │   ├── LoginRequest.java
-│       │   │   │   ├── PagedResponse.java
-│       │   │   │   ├── PortfolioAnalytics.java
-│       │   │   │   ├── PortfolioRequest.java
-│       │   │   │   ├── PortfolioResponse.java
-│       │   │   │   ├── PortfolioSummary.java
-│       │   │   │   ├── ProjectAnalytics.java
-│       │   │   │   ├── ProjectRequest.java
-│       │   │   │   ├── ProjectResponse.java
-│       │   │   │   ├── ProjectSummary.java
-│       │   │   │   ├── RegisterRequest.java
-│       │   │   │   └── UserDTO.java
-│       │   │   ├── entity/
-│       │   │   │   ├── AuditLog.java
-│       │   │   │   ├── Portfolio.java
-│       │   │   │   ├── Project.java
-│       │   │   │   ├── ProjectRisk.java
-│       │   │   │   ├── ProjectUpdate.java
-│       │   │   │   ├── Role.java
-│       │   │   │   ├── User.java
-│       │   │   │   └── enums/
-│       │   │   │       ├── PortfolioHealth.java
-│       │   │   │       ├── PortfolioStatus.java
-│       │   │   │       ├── ProjectHealth.java
-│       │   │   │       ├── ProjectPriority.java
-│       │   │   │       ├── ProjectStatus.java
-│       │   │   │       ├── RiskSeverity.java
-│       │   │   │       ├── RiskStatus.java
-│       │   │   │       └── RoleName.java
-│       │   │   ├── exception/
-│       │   │   │   ├── BadRequestException.java
-│       │   │   │   ├── ConflictException.java
-│       │   │   │   ├── ForbiddenException.java
-│       │   │   │   ├── GlobalExceptionHandler.java
-│       │   │   │   ├── ResourceNotFoundException.java
-│       │   │   │   └── UnauthorizedException.java
-│       │   │   ├── repository/
-│       │   │   │   ├── AuditLogRepository.java
-│       │   │   │   ├── PortfolioRepository.java
-│       │   │   │   ├── ProjectRepository.java
-│       │   │   │   ├── ProjectRiskRepository.java
-│       │   │   │   ├── ProjectUpdateRepository.java
-│       │   │   │   ├── RoleRepository.java
-│       │   │   │   └── UserRepository.java
-│       │   │   ├── security/
-│       │   │   │   ├── CustomUserDetailsService.java
-│       │   │   │   ├── JwtAuthenticationEntryPoint.java
-│       │   │   │   ├── JwtAuthenticationFilter.java
-│       │   │   │   ├── JwtTokenProvider.java
-│       │   │   │   └── SecurityConfig.java
-│       │   │   └── service/
-│       │   │       ├── AnalyticsService.java
-│       │   │       ├── AuditService.java
-│       │   │       ├── AuthService.java
-│       │   │       ├── DashboardService.java
-│       │   │       ├── PortfolioService.java
-│       │   │       ├── ProjectService.java
-│       │   │       └── UserService.java
-│       │   └── resources/
-│       │       ├── application.yml
-│       │       └── db/migration/
-│       └── test/
-│           ├── java/com/bankportfolio/
-│           │   ├── controller/
-│           │   │   ├── AuthControllerTest.java
-│           │   │   ├── DashboardControllerTest.java
-│           │   │   └── PortfolioControllerTest.java
-│           │   └── service/
-│           │       ├── AuthServiceTest.java
-│           │       ├── PortfolioServiceTest.java
-│           │       └── ProjectServiceTest.java
-│           └── resources/
-│               └── application-test.yml
+├── banking-portfolio-management/
+│   └── backend/                            # Spring Boot API
+│       ├── Dockerfile
+│       ├── pom.xml
+│       └── src/
+│           ├── main/
+│           │   ├── java/com/banking/portfolio/
+│           │   │   ├── PortfolioManagementApplication.java
+│           │   │   ├── config/
+│           │   │   │   └── CorsConfig.java
+│           │   │   ├── controller/
+│           │   │   │   ├── AuthController.java
+│           │   │   │   ├── AnalyticsController.java
+│           │   │   │   ├── DashboardController.java
+│           │   │   │   ├── PortfolioController.java
+│           │   │   │   └── ProjectController.java
+│           │   │   ├── dto/
+│           │   │   │   ├── request/
+│           │   │   │   │   ├── LoginRequest.java
+│           │   │   │   │   ├── PortfolioRequest.java
+│           │   │   │   │   ├── ProjectRequest.java
+│           │   │   │   │   └── RegisterRequest.java
+│           │   │   │   └── response/
+│           │   │   │       ├── AnalyticsResponse.java
+│           │   │   │       ├── AuthResponse.java
+│           │   │   │       ├── DashboardResponse.java
+│           │   │   │       ├── PortfolioAnalyticsItem.java
+│           │   │   │       ├── PortfolioResponse.java
+│           │   │   │       ├── ProjectResponse.java
+│           │   │   │       └── ProjectUpdateResponse.java
+│           │   │   ├── entity/
+│           │   │   │   ├── User.java
+│           │   │   │   ├── Role.java
+│           │   │   │   ├── Portfolio.java
+│           │   │   │   ├── Project.java
+│           │   │   │   ├── ProjectRisk.java
+│           │   │   │   ├── ProjectUpdate.java
+│           │   │   │   ├── AuditLog.java
+│           │   │   │   └── enums/
+│           │   │   │       ├── HealthStatus.java
+│           │   │   │       ├── PortfolioStatus.java
+│           │   │   │       ├── Priority.java
+│           │   │   │       ├── ProjectStatus.java
+│           │   │   │       └── RiskLevel.java
+│           │   │   ├── exception/
+│           │   │   │   ├── BadRequestException.java
+│           │   │   │   ├── GlobalExceptionHandler.java
+│           │   │   │   └── ResourceNotFoundException.java
+│           │   │   ├── repository/
+│           │   │   │   ├── UserRepository.java
+│           │   │   │   ├── PortfolioRepository.java
+│           │   │   │   ├── ProjectRepository.java
+│           │   │   │   ├── ProjectRiskRepository.java
+│           │   │   │   ├── ProjectUpdateRepository.java
+│           │   │   │   └── AuditLogRepository.java
+│           │   │   ├── security/
+│           │   │   │   ├── CustomUserDetailsService.java
+│           │   │   │   ├── JwtAuthenticationFilter.java
+│           │   │   │   └── JwtTokenProvider.java
+│           │   │   └── service/
+│           │   │       ├── AnalyticsService.java
+│           │   │       ├── AuthService.java
+│           │   │       ├── DashboardService.java
+│           │   │       ├── PortfolioService.java
+│           │   │       ├── ProjectService.java
+│           │   │       └── impl/
+│           │   └── resources/
+│           │       ├── application.yml
+│           │       └── db/migration/
+│           │           ├── V1__init_schema.sql
+│           │           └── V2__seed_data.sql
+│           └── test/
+│               └── java/com/banking/portfolio/
 │
-├── frontend/
-│   ├── Dockerfile                        # Multi-stage Node build
-│   ├── nginx.conf                        # SPA serving & API proxy
+├── frontend/                               # React SPA
+│   ├── Dockerfile
+│   ├── nginx.conf
 │   ├── package.json
 │   ├── tsconfig.json
-│   ├── tsconfig.node.json
 │   ├── vite.config.ts
-│   ├── vitest.config.ts                  # Test configuration
+│   ├── vitest.config.ts
+│   ├── tailwind.config.js
+│   ├── public/
+│   │   └── _redirects                      # Netlify SPA routing
 │   └── src/
 │       ├── main.tsx
 │       ├── App.tsx
-│       ├── vite-env.d.ts
+│       ├── index.css
 │       ├── __tests__/
-│       │   ├── App.test.tsx
 │       │   ├── LoginPage.test.tsx
-│       │   ├── DashboardPage.test.tsx
-│       │   ├── PortfolioListPage.test.tsx
-│       │   └── ProjectListPage.test.tsx
-│       ├── test/
-│       │   └── setup.ts
+│       │   └── ...
 │       ├── components/
 │       │   ├── layout/
 │       │   │   ├── DashboardLayout.tsx
@@ -212,17 +236,17 @@ bank-project/
 │       │   ├── useDebounce.ts
 │       │   └── usePagination.ts
 │       ├── pages/
-│       │   ├── AdminUsersPage.tsx
-│       │   ├── AnalyticsPage.tsx
-│       │   ├── DashboardPage.tsx
 │       │   ├── LoginPage.tsx
+│       │   ├── DashboardPage.tsx
+│       │   ├── AnalyticsPage.tsx
+│       │   ├── ProfilePage.tsx
+│       │   ├── AdminUsersPage.tsx
+│       │   ├── PortfolioListPage.tsx
 │       │   ├── PortfolioDetailPage.tsx
 │       │   ├── PortfolioFormPage.tsx
-│       │   ├── PortfolioListPage.tsx
-│       │   ├── ProfilePage.tsx
+│       │   ├── ProjectListPage.tsx
 │       │   ├── ProjectDetailPage.tsx
-│       │   ├── ProjectFormPage.tsx
-│       │   └── ProjectListPage.tsx
+│       │   └── ProjectFormPage.tsx
 │       ├── routes/
 │       │   └── AppRoutes.tsx
 │       ├── services/
@@ -233,157 +257,159 @@ bank-project/
 │           └── formatters.ts
 ```
 
-## Database Design
+---
+
+## Database Schema
 
 ```
-┌──────────────┐       ┌──────────────────┐       ┌──────────────┐
-│    roles     │       │    user_roles     │       │    users     │
-├──────────────┤       ├──────────────────┤       ├──────────────┤
-│ id (PK)      │◄──────│ role_id (FK)     │       │ id (PK)      │
-│ name         │       │ user_id (FK)     │──────▶│ username     │
-│ description  │       └──────────────────┘       │ email        │
-└──────────────┘                                  │ password     │
-                                                  │ first_name   │
-                                                  │ last_name    │
-                                                  │ enabled      │
-                                                  │ created_at   │
-                                                  │ updated_at   │
-                                                  └──────┬───────┘
-                                                         │
-┌──────────────────┐       ┌──────────────────┐          │
-│   portfolios     │       │    projects       │          │
-├──────────────────┤       ├──────────────────┤          │
-│ id (PK)          │◄──────│ portfolio_id (FK)│          │
-│ name             │       │ id (PK)          │          │
-│ description      │       │ name             │          │
-│ owner            │       │ description      │          │
-│ status           │       │ project_manager  │          │
-│ health           │       │ status           │          │
-│ budget           │       │ health           │          │
-│ actual_cost      │       │ priority         │          │
-│ start_date       │       │ budget           │          │
-│ end_date         │       │ actual_cost      │          │
-│ completion_pct   │       │ completion_pct   │          │
-│ created_at       │       │ start_date       │          │
-│ updated_at       │       │ end_date         │          │
-└──────────────────┘       │ created_at       │          │
-                           │ updated_at       │          │
-                           └────────┬─────────┘          │
-                                    │                    │
-                           ┌────────┴─────────┐          │
-                           │                  │          │
-                    ┌──────▼──────┐   ┌──────▼──────┐   │
-                    │project_risks│   │project_updates│  │
-                    ├─────────────┤   ├──────────────┤   │
-                    │ id (PK)     │   │ id (PK)      │   │
-                    │ project_id  │   │ project_id   │   │
-                    │ title       │   │ title        │   │
-                    │ description │   │ content      │   │
-                    │ severity    │   │ author       │   │
-                    │ status      │   │ created_at   │   │
-                    │ mitigation  │   │ updated_at   │   │
-                    │ created_at  │   └──────────────┘   │
-                    │ updated_at  │                      │
-                    └─────────────┘                      │
-                                                         │
-                           ┌──────────────────┐          │
-                           │    audit_logs     │          │
-                           ├──────────────────┤          │
-                           │ id (PK)          │          │
-                           │ user_id (FK)     │◄─────────┘
-                           │ action           │
-                           │ entity_name      │
-                           │ entity_id        │
-                           │ old_values       │
-                           │ new_values       │
-                           │ created_at       │
-                           └──────────────────┘
+┌──────────────┐
+│    users     │
+├──────────────┤
+│ id (PK)      │
+│ username     │
+│ email        │
+│ password     │
+│ full_name    │
+│ role         │
+│ enabled      │
+│ created_at   │
+│ updated_at   │
+└──────┬───────┘
+       │
+       │  (one-to-many)
+       ▼
+┌──────────────────┐       ┌──────────────────┐
+│   portfolios     │       │   audit_logs     │
+├──────────────────┤       ├──────────────────┤
+│ id (PK)          │       │ id (PK)          │
+│ name             │       │ user_id (FK)     │
+│ description      │       │ action           │
+│ owner            │       │ entity           │
+│ status           │       │ entity_id        │
+│ health           │       │ details          │
+│ budget           │       │ ip_address       │
+│ actual_cost      │       │ created_at       │
+│ start_date       │       └──────────────────┘
+│ end_date         │
+│ completion_pct   │
+│ created_at       │
+│ updated_at       │
+└────────┬─────────┘
+         │
+         │  (one-to-many)
+         ▼
+┌──────────────────┐
+│    projects      │
+├──────────────────┤
+│ id (PK)          │
+│ portfolio_id(FK) │
+│ name             │
+│ description      │
+│ project_manager  │
+│ status           │
+│ health           │
+│ priority         │
+│ budget           │
+│ actual_cost      │
+│ completion_pct   │
+│ start_date       │
+│ end_date         │
+│ created_at       │
+│ updated_at       │
+└────────┬─────────┘
+         │
+         ├──▶ (one-to-many) ──▶ ┌────────────────┐
+         │                      │ project_risks  │
+         │                      ├────────────────┤
+         │                      │ id (PK)        │
+         │                      │ project_id(FK) │
+         │                      │ title          │
+         │                      │ description    │
+         │                      │ severity       │
+         │                      │ status         │
+         │                      │ mitigation     │
+         │                      │ created_at     │
+         │                      └────────────────┘
+         │
+         └──▶ (one-to-many) ──▶ ┌──────────────────┐
+                                │ project_updates  │
+                                ├──────────────────┤
+                                │ id (PK)          │
+                                │ project_id (FK)  │
+                                │ title            │
+                                │ content          │
+                                │ author           │
+                                │ created_at       │
+                                └──────────────────┘
 ```
 
-**Relationships:**
-- `users` ↔ `roles` (Many-to-Many via `user_roles`)
-- `portfolios` → `projects` (One-to-Many)
-- `projects` → `project_risks` (One-to-Many)
-- `projects` → `project_updates` (One-to-Many)
-- `users` → `audit_logs` (One-to-Many)
+**Key relationships:**
+- `users` --< `audit_logs` (One-to-Many)
+- `portfolios` --< `projects` (One-to-Many, cascade delete)
+- `projects` --< `project_risks` (One-to-Many, cascade delete)
+- `projects` --< `project_updates` (One-to-Many, cascade delete)
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Java 17+** (JDK or JRE)
+- **Java 17+** (JDK)
 - **Node.js 18+** and npm
-- **PostgreSQL 16+** (or use Docker)
 - **Maven 3.9+** (or use included Maven wrapper)
+- **PostgreSQL 16+** (or use Docker)
 - **Docker & Docker Compose** (optional, recommended)
-
-### Environment Variables
-
-| Variable | Description | Default Value |
-|----------|-------------|---------------|
-| `DB_URL` | PostgreSQL JDBC URL | `jdbc:postgresql://localhost:5432/banking_portfolio` |
-| `DB_USERNAME` | Database username | `postgres` |
-| `DB_PASSWORD` | Database password | `postgres` |
-| `JWT_SECRET` | Secret key for JWT signing (min 32 chars) | `myDefaultSecretKey...` |
-| `JWT_EXPIRATION_MS` | JWT token expiration in ms | `86400000` (24h) |
-| `CORS_ORIGINS` | Allowed CORS origins | `http://localhost:3000` |
-| `SERVER_PORT` | Backend server port | `8080` |
-| `SHOW_SQL` | Enable SQL logging | `false` |
-| `FLYWAY_ENABLED` | Enable DB migrations | `true` |
 
 ### Option 1: Docker (Recommended)
 
 ```bash
-# Clone the repository and navigate to the project root
+git clone https://github.com/ramakdi99-cyber/Bank-Dashboard.git
+cd Bank-Dashboard
 docker-compose up -d
 ```
 
-This will:
-1. Start PostgreSQL 16 with health checks and persistent data
-2. Build and start the Spring Boot backend (waits for DB to be healthy)
-3. Build and start the React frontend via Nginx
+This starts:
+1. PostgreSQL 16 with health checks and persistent data
+2. Spring Boot backend on port 8080
+3. React frontend via Nginx on port 3000
 
-Access the application at: **http://localhost:3000**
+Access at: **http://localhost:3000**
 
-View logs:
 ```bash
+# View logs
 docker-compose logs -f
-```
 
-Stop all services:
-```bash
+# Stop services
 docker-compose down
-```
 
-Stop and remove volumes (reset data):
-```bash
+# Stop and remove all data
 docker-compose down -v
 ```
 
 ### Option 2: Manual Setup
 
-#### Database Setup
+#### Database
 
 ```sql
--- Connect to PostgreSQL and create the database
 CREATE DATABASE banking_portfolio;
 CREATE USER bankadmin WITH PASSWORD 'bankpass123';
 GRANT ALL PRIVILEGES ON DATABASE banking_portfolio TO bankadmin;
-
--- Connect to banking_portfolio and grant schema privileges
+\c banking_portfolio
 GRANT ALL ON SCHEMA public TO bankadmin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO bankadmin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO bankadmin;
 ```
+
+> **Note:** The backend uses H2 in-memory database in the default `dev` profile, so no PostgreSQL setup is required for local development. Flyway migrations run automatically on startup.
 
 #### Backend
 
 ```bash
-cd backend
-mvn spring-boot:run
+cd banking-portfolio-management/backend
+mvn clean package -DskipTests
+java -jar target/portfolio-management-1.0.0.jar
 ```
 
-The backend starts on **http://localhost:8080**. On first run, Flyway applies migrations and the DataInitializer seeds test data.
+Backend starts on **http://localhost:8080**.
 
 #### Frontend
 
@@ -393,58 +419,55 @@ npm install
 npm run dev
 ```
 
-The frontend dev server starts on **http://localhost:5173** with API proxy to the backend.
+Frontend dev server starts on **http://localhost:5173** with API proxy to the backend.
 
-### Build for Production
+### Environment Variables
 
-#### Frontend
-```bash
-cd frontend
-npm run build
-# Output in dist/
-```
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL JDBC URL | `jdbc:postgresql://localhost:5432/banking_portfolio` |
+| `DATABASE_USERNAME` | Database username | `bankadmin` |
+| `DATABASE_PASSWORD` | Database password | `bankpass123` |
+| `JWT_SECRET` | Secret key for JWT signing | (built-in default) |
+| `SPRING_PROFILES_ACTIVE` | Spring profile (`dev` / `prod`) | `dev` |
+| `VITE_API_URL` | Frontend API base URL | `http://localhost:8080/api` |
 
-#### Backend
-```bash
-cd backend
-mvn clean package -DskipTests
-# Output JAR in target/
-```
+---
 
 ## Default Credentials
 
 | Username | Password | Role | Description |
 |----------|----------|------|-------------|
-| `admin` | `admin123` | ADMIN | Full access — create, edit, delete, manage users |
-| `manager` | `manager123` | MANAGER | Portfolio & project management, read-only admin |
-| `viewer` | `viewer123` | VIEWER | Read-only access to dashboards and reports |
+| `admin` | `Ram123` | ADMIN | Full access — create, edit, delete, manage users |
+| `ram` | `Ram123` | MANAGER | Portfolio & project management |
+| `viewer` | `Ram123` | VIEWER | Read-only access to dashboards and reports |
+
+---
 
 ## API Reference
 
+All endpoints are prefixed with `/api`. JWT authentication is required for all endpoints except login and register. Include the token in the `Authorization: Bearer <token>` header.
+
 ### Authentication
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|:-------------:|
-| `POST` | `/api/auth/login` | Authenticate user, returns JWT | No |
-| `POST` | `/api/auth/register` | Register new user account | No |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|:----:|
+| `POST` | `/api/auth/login` | Login and receive JWT token | No |
+| `POST` | `/api/auth/register` | Register a new user | No |
 
 ### Dashboard
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|:-------------:|
-| `GET` | `/api/dashboard/summary` | Get dashboard KPI summary | Yes |
-| `GET` | `/api/dashboard/analytics` | Get dashboard analytics data | Yes |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|:----:|
+| `GET` | `/api/dashboard/summary` | KPI summary (totals, distributions) | Yes |
+| `GET` | `/api/dashboard/analytics` | Dashboard analytics data | Yes |
 
 ### Portfolios
 
 | Method | Endpoint | Description | Roles |
 |--------|----------|-------------|-------|
-| `GET` | `/api/portfolios` | List all portfolios (paginated) | All |
+| `GET` | `/api/portfolios` | List portfolios (paginated, filterable) | All |
 | `GET` | `/api/portfolios/{id}` | Get portfolio by ID | All |
-| `GET` | `/api/portfolios/search?query=` | Search portfolios | All |
-| `GET` | `/api/portfolios/filter/status?status=` | Filter by status | All |
-| `GET` | `/api/portfolios/filter/health?health=` | Filter by health | All |
-| `GET` | `/api/portfolios/summaries` | Get portfolio summaries | All |
 | `POST` | `/api/portfolios` | Create new portfolio | ADMIN, MANAGER |
 | `PUT` | `/api/portfolios/{id}` | Update portfolio | ADMIN |
 | `DELETE` | `/api/portfolios/{id}` | Delete portfolio | ADMIN |
@@ -453,154 +476,139 @@ mvn clean package -DskipTests
 
 | Method | Endpoint | Description | Roles |
 |--------|----------|-------------|-------|
-| `GET` | `/api/projects` | List all projects (paginated) | All |
+| `GET` | `/api/projects` | List projects (paginated, filterable) | All |
 | `GET` | `/api/projects/{id}` | Get project by ID | All |
-| `GET` | `/api/projects/search?query=` | Search projects | All |
-| `GET` | `/api/projects/portfolio/{id}` | Get projects by portfolio | All |
-| `GET` | `/api/projects/filter/status?status=` | Filter by status | All |
-| `GET` | `/api/projects/filter/health?health=` | Filter by health | All |
-| `GET` | `/api/projects/filter/priority?priority=` | Filter by priority | All |
 | `POST` | `/api/projects` | Create new project | ADMIN, MANAGER |
 | `PUT` | `/api/projects/{id}` | Update project | ADMIN, MANAGER |
 | `DELETE` | `/api/projects/{id}` | Delete project | ADMIN |
+
+### Analytics
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|:----:|
+| `GET` | `/api/analytics` | Full analytics (all fields) | Yes |
+| `GET` | `/api/analytics/projects` | Project-focused analytics | Yes |
+| `GET` | `/api/analytics/portfolios` | Portfolio-focused analytics | Yes |
+| `GET` | `/api/analytics/financial` | Financial metrics | Yes |
 
 ### Users
 
 | Method | Endpoint | Description | Roles |
 |--------|----------|-------------|-------|
-| `GET` | `/api/users` | List all users (admin) | ADMIN |
+| `GET` | `/api/users` | List all users | ADMIN |
 | `PUT` | `/api/users/{id}/role` | Update user role | ADMIN |
 | `GET` | `/api/users/me` | Get current user profile | All |
 
-### Analytics
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|:-------------:|
-| `GET` | `/api/analytics/projects` | Project analytics data | Yes |
-| `GET` | `/api/analytics/portfolios` | Portfolio analytics data | Yes |
-| `GET` | `/api/analytics/financial` | Financial analytics data | Yes |
+---
 
 ## Features
 
 ### Authentication & Authorization
-- Stateless JWT-based authentication with configurable token expiration
+- Stateless JWT-based authentication with 24-hour token expiration
 - BCrypt password hashing
 - Three-tier role system: ADMIN, MANAGER, VIEWER
 - Route-level and component-level access control
-- Automatic token refresh and 401 redirect handling
+- Automatic 401 redirect handling
 
 ### Portfolio Management
-- Full CRUD operations for portfolios
-- Portfolio health tracking (GREEN / AMBER / RED)
-- Status management (ACTIVE / ON_HOLD / ARCHIVED)
-- Budget and cost tracking with completion percentage
+- Full CRUD operations with status, health, budget, and completion tracking
+- Health indicators: GREEN, AMBER, RED
+- Status management: ACTIVE, ON_HOLD, COMPLETED, INACTIVE
 - Search across name, description, and owner fields
-- Filter by status and health
-- Pagination with configurable page sizes
+- Filter by status with server-side pagination
 
 ### Project Management
-- Full CRUD operations for projects within portfolios
-- Status tracking (PLANNED / ACTIVE / ON_HOLD / COMPLETED / DELAYED / CANCELLED)
-- Health monitoring (GREEN / AMBER / RED)
-- Priority levels (LOW / MEDIUM / HIGH / CRITICAL)
-- Budget tracking and cost variance analysis
-- Risk management with severity levels
-- Project update tracking and history
+- Full CRUD operations within portfolios
+- Six status states: PLANNED, ACTIVE, ON_HOLD, COMPLETED, DELAYED, CANCELLED
+- Priority levels: LOW, MEDIUM, HIGH, CRITICAL
+- Risk tracking with severity and mitigation
+- Project update history
 - Filter by status, health, and priority
-- Search across name, description, and project manager
 
 ### Dashboard & KPIs
-- Real-time KPI cards for key metrics
-- Total portfolios, projects, active, completed, delayed, at-risk
+- Real-time KPI cards: total portfolios, projects, active, completed, delayed, at-risk
 - Budget vs. actual cost comparison
-- Project status distribution pie chart
-- Health distribution bar chart
+- Project status and health distribution charts
 - Portfolio performance horizontal bar chart
 - Recent project updates feed
 
 ### Analytics
-- Project analytics with status, priority, and health distributions
-- Portfolio performance comparison
-- Financial analytics with budget utilization and monthly spending trends
-- Budget vs. actual cost visualization
+- Project analytics: status, priority, and health distributions (pie/bar charts)
+- Portfolio analytics: performance comparison, budget utilization, status breakdown
+- Financial analytics: total budget, spending, variance, utilization percentage
+- Interactive Recharts visualizations
 
-### Search, Filter, Sort & Pagination
-- Global search with debounced input
+### Search, Filter & Pagination
+- Global search with debounced input (300ms)
 - Multi-field filtering across all list views
 - Column-based sorting with ascending/descending toggle
-- Server-side pagination with page navigation
-- Configurable page sizes
-
-### Audit Trail
-- Automatic logging of all create, update, and delete operations
-- Old/new value comparison for change tracking
-- User attribution for all audit events
+- Server-side pagination with configurable page sizes
 
 ### Responsive Design
-- Mobile-first responsive layout
+- Mobile-first responsive layout with Tailwind CSS
 - Collapsible sidebar navigation
 - Adaptive grid layouts for dashboards and tables
-- Touch-friendly interactions
+
+---
 
 ## Testing
 
 ### Backend Tests
 
 ```bash
-cd backend
-
-# Run all tests
+cd banking-portfolio-management/backend
 mvn test
-
-# Run specific test class
-mvn test -Dtest=AuthServiceTest
-mvn test -Dtest=PortfolioServiceTest
-mvn test -Dtest=ProjectServiceTest
-mvn test -Dtest=DashboardControllerTest
-mvn test -Dtest=PortfolioControllerTest
-mvn test -Dtest=AuthControllerTest
 ```
-
-**Test Types:**
-- **Service Tests**: Unit tests using Mockito for mocking dependencies (`@ExtendWith(MockitoExtension.class)`)
-- **Controller Tests**: Integration tests using MockMvc with Spring context (`@SpringBootTest` + `@AutoConfigureMockMvc`)
-- **Test Database**: H2 in-memory database for fast test execution
 
 ### Frontend Tests
 
 ```bash
 cd frontend
-
-# Run all tests
-npm test
-
-# Run with coverage
-npx vitest run --coverage
-
-# Run in watch mode
-npm test
+npm test                        # Run tests in watch mode
+npx vitest run                  # Run all tests once
+npx vitest run --coverage       # Run with coverage
 ```
 
-**Test Types:**
-- **Component Tests**: Using React Testing Library + jsdom
-- **API Mocking**: Using `vi.mock()` for isolating components from API layer
-- **User Interaction**: Testing form submissions, navigation, and state changes
+---
+
+## Deployment
+
+### Frontend (Netlify)
+
+The frontend is deployed on Netlify with:
+- SPA routing via `public/_redirects` (`/* /index.html 200`)
+- Production API URL configured via `VITE_API_URL` environment variable
+- Build command: `npm run build`
+- Publish directory: `dist`
+
+### Backend (Render)
+
+The backend is deployed on Render:
+- Production URL: `https://bank-dashboard-zj3l.onrender.com/api`
+- Build command: `mvn clean package -DskipTests`
+- Start command: `java -jar target/portfolio-management-1.0.0.jar`
+- Environment: `SPRING_PROFILES_ACTIVE=prod`
+
+### Docker Deployment
+
+```bash
+docker-compose up -d --build
+```
+
+---
 
 ## Troubleshooting
 
-### Common Issues
-
 **Port already in use:**
 ```bash
-# Find and kill the process using the port
+# Windows
 netstat -ano | findstr :8080
 taskkill /PID <process_id> /F
-```
 
-**Database connection refused:**
-- Verify PostgreSQL is running: `pg_isready -h localhost -p 5432`
-- Check credentials match `application.yml` or environment variables
-- Ensure the `banking_portfolio` database exists
+# Linux/Mac
+lsof -i :8080
+kill -9 <process_id>
+```
 
 **Frontend build fails:**
 ```bash
@@ -610,41 +618,29 @@ npm install
 npm run build
 ```
 
-**Docker build fails:**
+**TypeScript errors:**
 ```bash
-# Rebuild without cache
-docker-compose build --no-cache
-
-# Check Docker daemon is running
-docker info
+cd frontend
+npx tsc --noEmit
 ```
+
+**Backend build fails:**
+```bash
+cd banking-portfolio-management/backend
+mvn clean package -DskipTests
+```
+
+**Database connection issues:**
+- Verify PostgreSQL is running: `pg_isready -h localhost -p 5432`
+- In `dev` profile, H2 in-memory database is used automatically (no PostgreSQL needed)
 
 **JWT authentication errors (401):**
 - Ensure the JWT secret is at least 32 characters
 - Check that the `Authorization: Bearer <token>` header is included
-- Verify the token has not expired
+- Verify the token has not expired (24-hour default)
 
-**Flyway migration errors:**
-- Ensure the database is empty or consistent with existing migrations
-- For development reset: `DROP DATABASE banking_portfolio; CREATE DATABASE banking_portfolio;`
-
-**CORS errors in development:**
-- Verify `CORS_ORIGINS` includes `http://localhost:5173` for Vite dev server
-- The backend proxy in `vite.config.ts` should handle this automatically
-
-### Health Checks
-
-```bash
-# Check backend health
-curl http://localhost:8080/api/dashboard/summary -H "Authorization: Bearer <token>"
-
-# Check frontend
-curl http://localhost:3000
-
-# Check database
-psql -h localhost -U bankadmin -d banking_portfolio -c "SELECT count(*) FROM users;"
-```
+---
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+MIT License.
