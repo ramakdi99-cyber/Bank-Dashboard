@@ -1,0 +1,60 @@
+# Plan: Create 4 Banking Dashboard Pages
+
+## Context
+The user wants 4 React page files rewritten with COMPLETE, production-quality implementations. The existing files are outdated/stub implementations that don't match the user's requirements. The existing codebase uses:
+- `useAuth` from `hooks/useAuth.ts` with `login(LoginRequest)`, `register(RegisterRequest)`, `{ user, isAuthenticated }`
+- `formatCurrency` from `utils/format.ts` returning full `$1,000,000` format
+- Services: `dashboardService.getDashboardSummary()`, `dashboardService.getDashboardAnalytics()`, `authService.getAllUsers()`, `userService.delete(id)` (no `authService.deleteUser`)
+- Common components: `StatusBadge`, `ConfirmDialog`, `LoadingSpinner`, `EmptyState` from `components/common/`
+- `User` type has `fullName: string`, `roles: Role[]` (not firstName/lastName)
+- `DashboardSummary` has `projectStatusDistribution: Record<string, number>` (not array)
+- `AnalyticsResponse` has `portfolioPerformance`, `recentUpdates`, `riskDistribution`, etc.
+
+## Files to Create (all at `src/pages/`)
+
+### 1. `LoginPage.tsx`
+- Complete rewrite with login + register toggle
+- Dark blue gradient background, centered white card
+- Banking icon (Building2 from lucide-react) + title
+- Login form: username, password fields
+- Register form: username, email, password, firstName, lastName
+- Loading states, error display, demo credentials
+- Uses `useAuth().login({ username, password })` and `useAuth().register({ username, email, password, firstName, lastName })`
+- Navigate to `/dashboard` on success
+
+### 2. `DashboardPage.tsx`
+- Complete rewrite with Tailwind CSS (not inline styles)
+- 8 KPI cards in responsive grid (grid-cols-1 sm:grid-cols-2 lg:grid-cols-4)
+- Each KPI card with icon, label, value, colored background accent
+- Charts section: PieChart (status, health), BarChart (budget vs actual, priority)
+- Recent Updates section
+- Fetches from `dashboardService.getDashboardSummary()` + `dashboardService.getDashboardAnalytics()`
+- Loading skeleton state, error handling
+
+### 3. `ProfilePage.tsx`
+- Complete rewrite using `useAuth().user`
+- Large avatar with initials
+- User info: username, email, fullName, roles (as badges), account info
+- Uses `getInitials`, `formatDate`, role badges with colors
+
+### 4. `AdminUsersPage.tsx`
+- Complete rewrite with standalone data table (no external DataTable component)
+- Fetches users via `authService.getAllUsers()`
+- Delete via `userService.delete(id)` with ConfirmDialog
+- Table columns: Username, Email, Full Name, Role(s), Status, Created
+- Role badges, delete button, loading/empty states
+- Guard: checks for ADMIN role
+
+## Key Decisions
+- Use Tailwind CSS classes throughout (user requested it)
+- Import `formatCurrency` and `formatDate` from `../utils/format` (user's specified import)
+- Import `useAuth` from `../hooks/useAuth` (user's specified import)
+- Use `userService` for delete since `authService.deleteUser` doesn't exist
+- DashboardSummary has `Record<string, number>` distributions, need to convert to chart data format `[{ name, value }]`
+- No new dependencies needed — all available: lucide-react, recharts, react-hot-toast
+
+## Verification
+- All files import from correct relative paths
+- All types match `types/index.ts` definitions
+- All service methods exist in the codebase
+- Lint and typecheck after creation (if available)
